@@ -1,0 +1,81 @@
+import { StartElection, RemoveVote, EndElection, CountVotes } from "../components/icons";
+
+export const ContractAddress = "0x05aad61513ecb1f15f35df49bfdbb937b0a33d0eda278f880198e5db37418537"
+
+export const SideBarOptions = [
+    {
+        id: 1,
+        label: 'Start Election',
+        icon: StartElection,
+    },
+    {
+        id: 2,
+        label: 'Suspend Election',
+        icon: RemoveVote,
+    },
+    // {
+    //     id: 3,
+    //     label: 'Cast Vote',
+    //     icon: CastVote,
+    // },
+    // {
+    //     id: 4,
+    //     label: 'Remove Vote',
+    //     icon: RemoveVote,
+    // },
+    {
+        id: 5,
+        label: 'End Election',
+        icon: EndElection,
+    },
+    {
+        id: 6,
+        label: 'Count Votes',
+        icon: CountVotes
+    }
+]
+
+export const Candidates = [
+    {
+        id: 1,
+        surname: "Yamal",
+        firstname: "Lamine",
+        noOfVotes: 6,
+        qualified: true,
+    },
+    {
+        id: 2,
+        surname: "Ethan",
+        firstname: "Nwaner",
+        noOfVotes: 4,
+        qualified: true,
+    },
+    {
+        id: 3,
+        surname: "Fermin",
+        firstname: "Lopez",
+        noOfVotes: 1,
+        qualified: false,
+    },
+    {
+        id: 4,
+        surname: "Vinicius",
+        firstname: "Jr",
+        noOfVotes: 9,
+        qualified: false,
+    },
+    {
+        id: 5,
+        surname: "Florian",
+        firstname: "Wirtz",
+        noOfVotes: 12,
+        qualified: true,
+    },
+    {
+        id: 6,
+        surname: "Florian",
+        firstname: "Wirtz",
+        noOfVotes: 12,
+        qualified: true,
+    },
+]
