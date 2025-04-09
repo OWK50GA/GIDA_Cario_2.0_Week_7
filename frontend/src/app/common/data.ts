@@ -1,6 +1,8 @@
 import { StartElection, RemoveVote, EndElection, CountVotes } from "../components/icons";
 
-export const ContractAddress = "0x05aad61513ecb1f15f35df49bfdbb937b0a33d0eda278f880198e5db37418537"
+export const ContractAddress = "0x05e24a19845e7b6561ee367becc293a34f860a0cea0935cf1e319876f1aa9466"
+
+// former contract address = 0x05aad61513ecb1f15f35df49bfdbb937b0a33d0eda278f880198e5db37418537
 
 export const SideBarOptions = [
     {

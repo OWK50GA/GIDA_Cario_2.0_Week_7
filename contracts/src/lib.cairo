@@ -8,9 +8,16 @@ pub struct Candidate {
     pub qualified: bool,
 }
 
+#[derive(Copy, Drop, Serde, PartialEq, starknet::Store)]
+pub struct CandidateInput {
+    pub fname: felt252,
+    pub lname: felt252,
+}
+
 #[starknet::interface]
 pub trait IVotingTrait<TContractState> {
     fn nominate(ref self: TContractState, candidate_fname: felt252, candidate_lname: felt252);
+    fn batch_nominate(ref self: TContractState, candidates_data: Array<CandidateInput>);
     fn start_election(ref self: TContractState);
     fn cast_vote(ref self: TContractState, candidate_id: u256);
     fn uncast_vote(ref self: TContractState, candidate_id: u256);
@@ -36,7 +43,7 @@ pub enum ElectionStatus {
 pub mod VotingContract {
     use starknet::{ContractAddress, get_caller_address};
     use starknet::storage::{Map, StoragePointerReadAccess, StoragePointerWriteAccess, StoragePathEntry, Vec, VecTrait, MutableVecTrait};
-    use super::{Candidate, IVotingTrait, ElectionStatus};
+    use super::{Candidate, IVotingTrait, ElectionStatus, CandidateInput};
     use core::poseidon::PoseidonTrait;
     use core::hash::{HashStateTrait, HashStateExTrait};
     use core::option::OptionTrait;
@@ -80,6 +87,40 @@ pub mod VotingContract {
             self.candidates.entry(id).write(Option::Some(new_candidate));
             self.total_candidates_no.write(self.total_candidates_no.read() + 1);
             self.existing_candidate_ids.push(id); //.write(id);
+        }
+        fn batch_nominate(ref self: ContractState, candidates_data: Array<CandidateInput>) {
+            assert(self.election_status.read() != ElectionStatus::Ended, 'Election already ended');
+            let mut current_total = self.total_candidates_no.read();
+
+            for i in 0..candidates_data.len() {
+                let candidate_input = *candidates_data.at(i);
+                let fname = candidate_input.fname;
+                let lname = candidate_input.lname;
+        
+                let id: u256 = generate_id(fname, lname);
+                let mistake_id: u256 = generate_id(lname, fname);
+                
+                assert(
+                    !self.candidates.entry(id).read().is_some() 
+                    && !self.candidates.entry(mistake_id).read().is_some(),
+                    'Candidate already exists'
+                );
+        
+                let new_candidate = Candidate {
+                    id,
+                    index: current_total + 1,
+                    fname,
+                    lname,
+                    no_of_votes: 0,
+                    qualified: true
+                };
+                
+                self.candidates.entry(id).write(Option::Some(new_candidate));
+                current_total += 1;
+                self.existing_candidate_ids.push(id);
+            }
+            
+            self.total_candidates_no.write(current_total);
         }
         fn start_election(ref self: ContractState) {
             let election_status = self.election_status.read();
