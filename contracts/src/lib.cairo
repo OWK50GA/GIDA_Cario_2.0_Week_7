@@ -133,8 +133,8 @@ pub mod VotingContract {
         }
         fn cast_vote(ref self: ContractState, candidate_id: u256) {
             assert(
-                self.election_status.read() != ElectionStatus::Started, 
-                'Election already ended'
+                self.election_status.read() == ElectionStatus::Started, 
+                'Election not going on'
             );
             let voter = get_caller_address();
             let has_voted = self.has_voted.entry(voter).read();
@@ -194,9 +194,7 @@ pub mod VotingContract {
             let election_status = self.election_status.read();
             assert(get_caller_address() == self.owner.read(), 'Only owner can change status');
             assert(
-                election_status != ElectionStatus::Suspended && 
-                election_status != ElectionStatus::Ended &&
-                election_status != ElectionStatus::NotActive, 
+                election_status == ElectionStatus::Started,
                 'Election already started/ended'
             );
             self.election_status.write(ElectionStatus::Suspended);

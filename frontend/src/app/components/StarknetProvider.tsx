@@ -11,6 +11,7 @@ import {
   StarknetConfig,
   starkscan,
   useInjectedConnectors,
+  jsonRpcProvider
 } from "@starknet-react/core";
 import { ArgentMobileConnector } from "starknetkit/argentMobile";
 import { WebWalletConnector } from "starknetkit/webwallet";
@@ -51,7 +52,11 @@ export function StarknetProvider({ children }: StarknetProviderProps) {
     <StarknetConfig
       connectors={connectors}
       chains={[mainnet, sepolia]}
-      provider={provider}
+      provider={
+        jsonRpcProvider({ rpc: (chain) => ({
+          nodeUrl: process.env.NEXT_PUBLIC_RPC_URL
+        })})
+      }
       explorer={starkscan}
       autoConnect
     >

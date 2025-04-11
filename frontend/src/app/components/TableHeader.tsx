@@ -6,7 +6,7 @@ export default function TableHeader({candidates}: {
     candidates: Record<string, any>[]
 }){
 
-    const { address } = useAccount()
+    const { address } = useAccount();
 
     return (
         <div>
@@ -19,7 +19,7 @@ export default function TableHeader({candidates}: {
             
                         <div className="w-full flex mt-10 justify-between items-center">
                             <p>
-                                <span className="font-bold text-l">Candidates: </span> {candidates.length} Total
+                                <span className="font-bold text-l">Candidates: </span> {candidates?.length} Total
                             </p>
                             <div className="">
                                 <input 

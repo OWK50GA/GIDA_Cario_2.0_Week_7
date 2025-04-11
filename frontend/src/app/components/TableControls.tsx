@@ -21,7 +21,7 @@ export default function TableControls({togglePopover, candidates}: {
                 </div>
 
                 <div className="">
-                    <Pagination count={candidates.length} />
+                    <Pagination count={candidates?.length} />
                 </div>
             </div>
 
